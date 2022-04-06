@@ -1,0 +1,37 @@
+:root{
+	--dark-liver: #483c46ff;
+	--ming: #3c6e71ff;
+	--bud-green: #70ae6eff;
+	--inchworm: #beee62ff;
+	--mandarin: #f4743bff;
+}
+
+.cellBlock{
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	justify-content: center;
+	height: 80px;	
+	width: 80px;
+	background-color: #70ae6eff;
+}
+
+.blankCircle,
+.oneCircle,
+.twoCircle{
+	height: 70px;
+	width: 70px;
+	border-radius: 50px;
+}
+
+.blankCircle{
+	background-color: #fff;
+}
+
+.oneCircle{
+	background-color: var(--mandarin);
+}
+
+.twoCircle{
+	background-color: var(--ming);
+}
