@@ -172,7 +172,6 @@ function App() {
 				}
 			}
 
-
 			let result = checkWin(board) //check for wins
 			if (result === state.player1) {
 				dispatch({
@@ -212,11 +211,10 @@ function App() {
 	return (
 
 		<div className="App">
-			<div className="container">
+			<div className={styles.mainContainer}>
 				<button
 					onClick={() => {
 						dispatch({ type: 'newGame', board: initBoard() })
-
 					}}
 				> New Game
 				</button>

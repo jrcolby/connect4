@@ -6,6 +6,11 @@
 	--mandarin: #f4743bff;
 }
 
+.mainContainer{
+  display: flex;
+  flex-direction: vertical;
+}
+
 .cellBlock{
 	display: flex;
 	flex-direction: row;
