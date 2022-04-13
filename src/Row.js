@@ -2,7 +2,7 @@ import styles from './Styles.module.css'
 
 export const Row = ({ row, play }) => {
 	return (
-		<tr>
+		<tr className={styles.boardRow}>
 			{row.map((cell, i) => (
 				<Cell key={i} value={cell} columnIndex={i} play={play} />
 			))}
@@ -18,7 +18,7 @@ const Cell = ({ value, columnIndex, play }) => {
 	else if (value === 2) { color = 'twoCircle' }
 
 	return (
-		<td>
+		<td className={styles.cellContainer}>
 			<div className={styles.cellBlock}
 				onClick={() => {
 					play(columnIndex)

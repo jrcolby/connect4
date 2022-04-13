@@ -1,14 +1,33 @@
 :root{
+  --light-goldenrod-yellow: #f0f0c9ff;
+  --orange-yellow: #f2bb05ff;
 	--dark-liver: #483c46ff;
 	--ming: #3c6e71ff;
 	--bud-green: #70ae6eff;
 	--inchworm: #beee62ff;
 	--mandarin: #f4743bff;
+  --blood-red: #6e0e0aff;
+  --uranian-blue: #a6d9f7ff;
 }
 
+body{
+  background-color: var(--light-goldenrod-yellow);
+}
 .mainContainer{
   display: flex;
-  flex-direction: vertical;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: var(--light-goldenrod-yellow);
+}
+
+.boardTable, .boardTableBody{
+  border: 0px;
+  border-collapse: collapse;
+}
+
+.cellContainer{
+  padding: 0px;
 }
 
 .cellBlock{
@@ -18,7 +37,10 @@
 	justify-content: center;
 	height: 80px;	
 	width: 80px;
-	background-color: #70ae6eff;
+	background-color: var(--uranian-blue);
+  padding:10px;
+  margin: 0px;
+  border: 0px;
 }
 
 .blankCircle,
@@ -30,7 +52,7 @@
 }
 
 .blankCircle{
-	background-color: #fff;
+	background-color: var(--light-goldenrod-yellow);
 }
 
 .oneCircle{
@@ -39,4 +61,25 @@
 
 .twoCircle{
 	background-color: var(--ming);
+}
+
+.modalContainer  {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%,-50%);
+  background-color: #FCFC;
+  padding: 50px;
+  z-index: 1000;
+
+}
+
+.modalOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0,0,0,.7);
+  z-index: 1000;
 }

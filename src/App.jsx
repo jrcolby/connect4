@@ -1,13 +1,15 @@
-import { useReducer } from 'react'
+import { useReducer, useEffect, useState } from 'react'
 import { Row } from './Row'
+import {HighScoresModal} from './HighScoresModal'
 import styles from './Styles.module.css'
+import axios from "axios"
 
 // create 6x7 2d array full of null values
 function initBoard() {
 	return Array(6).fill().map(arr => Array(7).fill(null));
 }
 
-// functions for checking for win conditions in four directions
+// functions for check(ng for win conditions in four directions
 // vertical wins can only start on rows > 3
 const checkVert = (board) => {
 	for (let r = 3; r < 6; r++) {
@@ -109,7 +111,6 @@ const reducer = (state, action) => {
 		case 'newGame':
 			return {
 				...initialState,
-				board: action.board,
 			}
 
 		case 'togglePlayer':
@@ -117,6 +118,7 @@ const reducer = (state, action) => {
 				...state,
 				currentPlayer: action.nextPlayer,
 				board: action.board,
+        turnNumber: action.newTurn,
 			}
 
 		case 'endGame':
@@ -152,6 +154,7 @@ const initialState = {
 	player1: 1,
 	player2: 2,
 	currentPlayer: 1,
+  turnNumber: 1,
 	board: initBoard(),
 	gameOver: false,
 	message: '',
@@ -159,7 +162,6 @@ const initialState = {
 
 function App() {
 	const [state, dispatch] = useReducer(reducer, initialState);
-
 	const play = (col) => {
 		let board = cloneBoard(state.board)
 
@@ -176,13 +178,13 @@ function App() {
 			if (result === state.player1) {
 				dispatch({
 					type: 'endGame',
-					message: 'Player1 wins!',
+					message: 'Player 1 Wins!',
 					board,
 				});
 			} else if (result === state.player2) {
 				dispatch({
 					type: 'endGame',
-					message: 'Player 2 wins!',
+					message: 'Player 2 Wins!',
 					board,
 				});
 			} else if (result === 'draw') {
@@ -197,7 +199,12 @@ function App() {
 						? state.player2
 						: state.player1
 
-				dispatch({ type: 'togglePlayer', nextPlayer, board })
+        const newTurn = state.turnNumber +1;
+				dispatch({ type: 'togglePlayer',
+          nextPlayer,
+          board,
+          newTurn
+          })
 			}
 		}else{
 			dispatch({
@@ -207,26 +214,38 @@ function App() {
 		}
 	};
 
-
+  let debug = false;
 	return (
-
 		<div className="App">
 			<div className={styles.mainContainer}>
+        {debug &&
+          <>
 				<button
 					onClick={() => {
-						dispatch({ type: 'newGame', board: initBoard() })
+						dispatch({ type: 'newGame'})
 					}}
 				> New Game
+        </button>
+        <button 
+          onClick={() => {
+            dispatch({type:'endGame', board:state.board})
+          }}>
+          debug modal open
 				</button>
+        </>
+    }
 
-				<table>
-					<tbody>
+				<table className={styles.boardTable}>
+					<tbody className={styles.boardTableBody}>
 						{state.board.map((row, i) => (
 							<Row key={i} row={row} play={play} />
 						))}
 					</tbody>
 				</table>
-				<p> {state.message} </p>
+        <HighScoresModal gameOver={state.gameOver}
+                        turnNumber={state.turnNumber}
+                        dispatch={dispatch}
+                        message={state.message}/>
 			</div>
 		</div>
 	);
