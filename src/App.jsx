@@ -1,8 +1,7 @@
-import { useReducer, useEffect, useState } from 'react'
+import { useReducer, } from 'react'
 import { Row } from './Row'
 import {HighScoresModal} from './HighScoresModal'
 import styles from './Styles.module.css'
-import axios from "axios"
 
 // create 6x7 2d array full of null values
 function initBoard() {
@@ -227,7 +226,7 @@ function App() {
 				<table className={styles.boardTable}>
 					<tbody className={styles.boardTableBody}>
 						{state.board.map((row, i) => (
-							<Row key={i} row={row} play={play} />
+							<Row key={i} rowIndex={i} row={row} play={play} />
 						))}
 					</tbody>
 				</table>

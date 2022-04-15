@@ -33,7 +33,7 @@ body{
   padding: 0px;
 }
 
-.cellBlock{
+.cellBlock, .topLeftCell, .topRightCell, .bottomLeftCell, .bottomRightCell{
 	display: flex;
 	flex-direction: row;
 	align-items: center;
@@ -46,6 +46,21 @@ body{
   border: 0px;
 }
 
+.topLeftCell{
+  border-radius: 20px 0 0 0;
+}
+
+.topRightCell{
+  border-radius: 0 20px 0 0;
+}
+
+.bottomRightCell{
+  border-radius: 0 0 20px 0;
+}
+
+.bottomLeftCell{
+  border-radius: 0 0 0 20px;
+}
 .blankCircle,
 .oneCircle,
 .twoCircle{
@@ -72,7 +87,6 @@ body{
   flex-direction: column;
   justify-content:center;
   align-items: center;
-  border: 2px solid red;
   margin-bottom: 75px;
   padding: 0px;
 }
@@ -118,7 +132,7 @@ body{
 
 .highScoreForm{
   /* margin-bottom: 30px; */
-  paddin: 0px;
+  padding: 0px;
 }
 .scoreTable{
   margin-top: 50px;
