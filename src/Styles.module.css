@@ -8,17 +8,20 @@
 	--mandarin: #f4743bff;
   --blood-red: #6e0e0aff;
   --uranian-blue: #a6d9f7ff;
+  /* used vars */
+  --board-color: #F5D1A9;
+  --main-background: #F0FFEC;
 }
 
 body{
-  background-color: var(--light-goldenrod-yellow);
+  background-color: var(--main-background);
 }
 .mainContainer{
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  background: var(--light-goldenrod-yellow);
+  background: var(--main-background);
 }
 
 .boardTable, .boardTableBody{
@@ -37,8 +40,8 @@ body{
 	justify-content: center;
 	height: 80px;	
 	width: 80px;
-	background-color: var(--uranian-blue);
-  padding:10px;
+	background-color: var(--board-color);
+  padding:8px;
   margin: 0px;
   border: 0px;
 }
@@ -52,7 +55,8 @@ body{
 }
 
 .blankCircle{
-	background-color: var(--light-goldenrod-yellow);
+	background-color: var(--main-background);
+
 }
 
 .oneCircle{
@@ -63,14 +67,36 @@ body{
 	background-color: var(--ming);
 }
 
+.headerDiv{
+  display: flex;
+  flex-direction: column;
+  justify-content:center;
+  align-items: center;
+  border: 2px solid red;
+  margin-bottom: 75px;
+  padding: 0px;
+}
+
+.headerText{
+  font-size: 2.5em;
+  margin: 0px;
+}
+
 .modalContainer  {
   position: fixed;
   top: 50%;
   left: 50%;
   transform: translate(-50%,-50%);
-  background-color: #FCFC;
+  background-color: var(--board-color);
+  border-radius: 10px;
   padding: 50px;
   z-index: 1000;
+  width: 40%;
+
+  display: flex;
+  flex-direction: column;
+  justify-content:center;
+  align-items: center;
 
 }
 
@@ -82,4 +108,37 @@ body{
   bottom: 0;
   background-color: rgba(0,0,0,.7);
   z-index: 1000;
+}
+
+.scoreInfo{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.highScoreForm{
+  /* margin-bottom: 30px; */
+  paddin: 0px;
+}
+.scoreTable{
+  margin-top: 50px;
+  width: 80%;
+  border-collapse: collapse;
+}
+
+.scoreRow{
+  border-radius: 10px;
+}
+
+.nameCell{
+  border-radius: 5px 0px 0px 5px;
+  padding: 8px;
+}
+
+.scoreCell {
+  border-radius: 0px 5px 5px 0px;
+  padding: 8px;
+}
+.scoreRow:nth-child(odd) {
+  background-color: #ffe9d9;
 }

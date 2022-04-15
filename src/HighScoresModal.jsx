@@ -4,70 +4,69 @@ import {  useEffect, useState } from 'react'
 import styles from './Styles.module.css'
 import axios from "axios"
 
-const endpoint= 'https://krat.es/53a268471af10ef8b374'
-
+const endpoint= 'https://krat.es/f38fc0dd7a39258b9b6e'
 
 export const HighScoresModal = ({gameOver, turnNumber, dispatch, message }) => {
   const [scores, setScores] = useState([])
   const [inputValue, setInputValue] = useState("");
-
+  const [scoreSubmitted, setScoreSubmitted] = useState(false);
+  
   const handleSubmit = async () => { 
     if (inputValue ==="") return;
     const newScore = {name: inputValue, score:turnNumber} 
     const {data, status} = await axios.post(endpoint, newScore)
     if(status === 200){
       fetchScores()
+      //turnNumber = 9999;
     }
     setInputValue("")
+    setScoreSubmitted(true);
   }
 
-  const checkNewHighScore= (scores) =>{
-      if (scores.length <= 10) {
-      return true;
-    }
-      scores.forEach(score =>{
-        if (turnNumber < score) return true;
-    })
-    return false;
-  }
   const fetchScores = async () => {
     const {data, status} = await axios.get(endpoint )
     if (status === 200){
       // sort the scores from lowest to highest
-      const newScores = data.sort((a,b) => a.score - b.score).slice(0,9)
+      const newScores = data.sort((a,b) => a.score - b.score).slice(0,10)
       setScores(newScores)
     }
-
   }
+
+  const checkNewHighScore = () =>{
+    console.log("in check new hs with turnNumber" + turnNumber + " and final score" + scores[scores.length-1])
+    if (scores.length < 10 || turnNumber<  scores[scores.length-1].score){
+      return true;
+    }
+    return false;
+  }
+
   useEffect(() => {
     fetchScores();
-    console.log("initial modal mount")
   },[])
 
+ 
   if (!gameOver) return null;
-  let newHighScore = (checkNewHighScore(scores))
-  //console.log(newHighScore)
+  
   return ReactDom.createPortal (
-    // enter name on high score form div
-    // non high score or draw info div
-    // actual top 10 sores
     <>
       <div className={styles.modalOverlay}>
         <div className={styles.modalContainer}>
-          <div className="scoreInfo">
+          <div className={ styles.scoreInfo }>
             {message}
-            {console.log(newHighScore)}
-            {newHighScore &&
               <HighScoreInput inputValue={inputValue}
                             handleSubmit={handleSubmit}
-                            setInputValue={setInputValue} />
-          }
-          <table>
+                            setInputValue={setInputValue}
+                            newHighScore={checkNewHighScore()}
+                            scoreSubmitted={scoreSubmitted}/>
+                        
+          
+          </div>
+          <table className={styles.scoreTable}>
             <tbody>
                 {scores.map((record)=> (
-                  <tr key={record._id}>
-                    <td>{record.name}</td>
-                    <td>{record.score}</td>
+                  <tr className={styles.scoreRow} key={record._id}>
+                    <td className={styles.nameCell}>{record.name}</td>
+                    <td className={styles.scoreCell}>{record.score}</td>
                   </tr>
                 ))}
             </tbody>
@@ -78,7 +77,6 @@ export const HighScoresModal = ({gameOver, turnNumber, dispatch, message }) => {
               }}
             > Play again?
             </button>
-          </div>
         </div>
       </div>
     </>,
@@ -86,9 +84,13 @@ export const HighScoresModal = ({gameOver, turnNumber, dispatch, message }) => {
   )
 }
 
-const HighScoreInput = ({inputValue, handleSubmit, setInputValue}) =>{
-         return( 
-          <div className="highscoreForm">
+const HighScoreInput = ({inputValue, handleSubmit, setInputValue, newHighScore,scoreSubmitted }) =>{
+      console.log("highscore input newhs: " + newHighScore);
+    
+      if (!newHighScore || scoreSubmitted) return null;
+         return(
+          <div className={styles.highScoreForm}> 
+                <p> You got a new high score! </p>
             <input 
               value={inputValue}
               onChange={e => setInputValue(e.target.value)}

@@ -214,10 +214,28 @@ function App() {
 		}
 	};
 
-  let debug = false;
+  let debug = true;
 	return (
 		<div className="App">
+
 			<div className={styles.mainContainer}>
+    
+      <div className={styles.headerDiv}>
+        <h1 className={styles.headerText}> Connect 4 </h1>
+      </div>
+
+				<table className={styles.boardTable}>
+					<tbody className={styles.boardTableBody}>
+						{state.board.map((row, i) => (
+							<Row key={i} row={row} play={play} />
+						))}
+					</tbody>
+				</table>
+        <HighScoresModal gameOver={state.gameOver}
+                        turnNumber={state.turnNumber}
+                        dispatch={dispatch}
+                        message={state.message}/>
+			</div>
         {debug &&
           <>
 				<button
@@ -234,19 +252,6 @@ function App() {
 				</button>
         </>
     }
-
-				<table className={styles.boardTable}>
-					<tbody className={styles.boardTableBody}>
-						{state.board.map((row, i) => (
-							<Row key={i} row={row} play={play} />
-						))}
-					</tbody>
-				</table>
-        <HighScoresModal gameOver={state.gameOver}
-                        turnNumber={state.turnNumber}
-                        dispatch={dispatch}
-                        message={state.message}/>
-			</div>
 		</div>
 	);
 }
