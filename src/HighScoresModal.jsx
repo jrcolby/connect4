@@ -3,7 +3,7 @@ import ReactDom from 'react-dom'
 import { useEffect, useState } from 'react'
 import styles from './Styles.module.css'
 import axios from 'axios'
-const endpoint = 'https://krat.es/2b973f81f8788509eaa1'
+const endpoint = 'https://krat.es/ed9c524c7b801cfb9f6a'
 
 // https://krat.es/ed9c524c7b801cfb9f6a final endpoint
 export const HighScoresModal = ({
