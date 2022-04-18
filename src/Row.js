@@ -1,20 +1,18 @@
 import styles from './Styles.module.css'
 
-export const Row = ({  rowIndex, row, play }) => {
-  console.log("row index: " + rowIndex);
+export const Row = ({  rowIndex, row, play, toggleDisc, clearHoverRow }) => {
 	return (
 		<tr className={styles.boardRow}>
 			{row.map((cell, i) => (
-				<Cell key={i} rowIndex={rowIndex} value={cell} columnIndex={i} play={play} />
+				<Cell key={i} rowIndex={rowIndex} value={cell} columnIndex={i} play={play} toggleDisc={toggleDisc} clearHoverRow={clearHoverRow} />
 			))}
 		</tr>
 	)
 }
 
 
-const Cell = ({ value, columnIndex, play, rowIndex }) => {
+const Cell = ({ value, columnIndex, play, rowIndex, toggleDisc, clearHoverRow }) => {
 	let color = 'blankCircle';
-  console.log("col index: " + columnIndex);
 	if (value === 1) { color = 'oneCircle' }
 	else if (value === 2) { color = 'twoCircle' }
 
@@ -26,13 +24,20 @@ const Cell = ({ value, columnIndex, play, rowIndex }) => {
   if (rowIndex === 5 && columnIndex === 6) cellStyle = styles.bottomRightCell;
 
 	return (
-		<td className={styles.cellContainer}>
+		<td className={styles.cellContainer} >
 			<div className={cellStyle}
 				onClick={() => {
 					play(columnIndex)
 				}}
 			>
-				<div className={styles[color]}> </div>
+				<div className={styles[color]}
+          onMouseEnter={() =>{
+            toggleDisc(columnIndex)
+          }}
+          onMouseOut={() =>{
+            clearHoverRow()
+          }}
+        > </div>
 			</div>
 		</td>
 	)

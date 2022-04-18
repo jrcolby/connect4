@@ -1,3 +1,6 @@
+
+@import url('https://fonts.googleapis.com/css2?family=Alfa+Slab+One&family=Arvo:wght@700&family=Nova+Mono&display=swap');
+
 :root{
   --light-goldenrod-yellow: #f0f0c9ff;
   --orange-yellow: #f2bb05ff;
@@ -15,7 +18,47 @@
 
 body{
   background-color: var(--main-background);
+  margin: 0;
+  font-family: 'Arvo', monospace;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
+
+
+.greenButton, .redButton{
+  padding: 0;
+  border: none;
+  font: inherit;
+  cursor: pointer;
+   /* default for <button>, but useful for <a> */
+  display: inline-block;
+  text-align: center;
+  text-decoration: none;
+
+  /* create a small space when buttons wrap on 2 lines */
+  margin: 2px 0;
+
+  /* invisible border (will be colored on hover/focus) */
+  border: solid 2px transparent;
+  border-radius: 0.4em;
+
+  /* size comes from text & padding (no width/height) */
+  padding: 0.5em 1em;
+
+  /* make sure colors have enough contrast! */
+  color: #ffffff;
+  background-color: var(--ming);
+}
+
+.redButton{
+  margin-top: 20px;
+  background-color: #ff6961;
+}
+/* code { */
+/*   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', */
+/*     monospace; */
+/* } */
+
 .mainContainer{
   display: flex;
   flex-direction: column;
@@ -24,16 +67,48 @@ body{
   background: var(--main-background);
 }
 
-.boardTable, .boardTableBody{
+
+.headerDiv {
+  display: flex;
+  flex-direction: column;
+  justify-content:center;
+  align-items: center;
+  /* margin-top: 20px; */
+  margin-bottom: 0px;
+  padding: 0px;
+}
+
+
+.headerText, .orangeHeader, .greenHeader{
+  font-size: 2.5em;
+  margin: 0px;
+}
+
+.orangeHeader{
+  color: var(--mandarin)
+}
+
+.greenHeader{
+  color:var(--ming);
+  cursor: pointer;
+}
+
+.boardContainer{
+  display: flex;
+  flex-direction:row;
+  align-items: flex-end;
+}
+
+.boardTable, .boardTableBody, .hoverDiscTable, .hoverDiscTableBody{
   border: 0px;
   border-collapse: collapse;
 }
 
-.cellContainer{
+.cellContainer, .hoverDiscContainer{
   padding: 0px;
 }
 
-.cellBlock, .topLeftCell, .topRightCell, .bottomLeftCell, .bottomRightCell{
+.cellBlock, .topLeftCell, .topRightCell, .bottomLeftCell, .bottomRightCell, .hoverDiscCellBlock{
 	display: flex;
 	flex-direction: row;
 	align-items: center;
@@ -41,9 +116,14 @@ body{
 	height: 80px;	
 	width: 80px;
 	background-color: var(--board-color);
-  padding:8px;
+  padding:6px;
   margin: 0px;
   border: 0px;
+  cursor: pointer;
+}
+
+.hoverDiscCellBlock{
+  background-color: var(--main-background)
 }
 
 .topLeftCell{
@@ -61,17 +141,19 @@ body{
 .bottomLeftCell{
   border-radius: 0 0 0 20px;
 }
+
 .blankCircle,
 .oneCircle,
-.twoCircle{
+.twoCircle,
+.hoverDisc{
+  
 	height: 70px;
 	width: 70px;
 	border-radius: 50px;
 }
 
-.blankCircle{
+.blankCircle, .blankHoverDisc{
 	background-color: var(--main-background);
-
 }
 
 .oneCircle{
@@ -80,22 +162,8 @@ body{
 
 .twoCircle{
 	background-color: var(--ming);
-}
 
-.headerDiv{
-  display: flex;
-  flex-direction: column;
-  justify-content:center;
-  align-items: center;
-  margin-bottom: 75px;
-  padding: 0px;
 }
-
-.headerText{
-  font-size: 2.5em;
-  margin: 0px;
-}
-
 .modalContainer  {
   position: fixed;
   top: 50%;
@@ -111,17 +179,46 @@ body{
   flex-direction: column;
   justify-content:center;
   align-items: center;
-
 }
 
-.modalOverlay {
+.modalSlider, .modalSliderActive{
+
+  background-color: var(--board-color);
+  border-radius: 0 10px 10px 0;
+  height: 100%;
+  padding: 10px;
+  z-index: 1000;
+  width: 250px;
+
+  display: flex;
+  flex-direction: column;
+  justify-content:center;
+  align-items: center;
+  position: fixed;
+  left: -100%;
+  transition: 500ms;
+}
+
+.modalSliderActive{
+  left: 0;
+  transition: 1000ms;
+}
+
+.modalOverlay, .modalOverlayInactive {
   position: fixed;
   top: 0;
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: rgba(0,0,0,.7);
+  background-color: rgba(0,0,0,.2);
   z-index: 1000;
+  transition: 1000ms;
+}
+
+.modalOverlayInactive{
+  opacity: 0;
+  z-index: -1000;
+  transition: 1000ms;
 }
 
 .scoreInfo{
@@ -133,7 +230,21 @@ body{
 .highScoreForm{
   /* margin-bottom: 30px; */
   padding: 0px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
+
+.nameInput{
+  height: auto;
+  width: 100%;
+  border: none;
+  margin-bottom: 10px;
+  border-radius: 2px;
+  height: 20px;
+  margin-bottom: 10px;
+}
+
 .scoreTable{
   margin-top: 50px;
   width: 80%;

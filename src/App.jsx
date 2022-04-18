@@ -3,13 +3,16 @@ import { Row } from './Row'
 import {HighScoresModal} from './HighScoresModal'
 import styles from './Styles.module.css'
 
-// create 6x7 2d array full of null values
 function initBoard() {
 	return Array(6).fill().map(arr => Array(7).fill(null));
 }
 
+function initHoverRow() {
+  return Array(7).fill(0);
+}
+
 // functions for check(ng for win conditions in four directions
-// vertical wins can only start on rows > 3
+// vertical ins can only start on rows > 3
 const checkVert = (board) => {
 	for (let r = 3; r < 6; r++) {
 		for (let c = 0; c < 7; c++) {
@@ -24,7 +27,7 @@ const checkVert = (board) => {
 			}
 		}
 	}
-};
+}; 
 
 //horizontal wins can only start at cols < 3
 const checkHoriz = (board) => {
@@ -107,6 +110,12 @@ const checkWin = (board) => {
 const reducer = (state, action) => {
 	switch (action.type) {
 
+    case 'hover':
+      return{
+        ...state,
+        hoverRow: action.hoverRow,
+      }
+
 		case 'newGame':
 			return {
 				...initialState,
@@ -117,6 +126,7 @@ const reducer = (state, action) => {
 				...state,
 				currentPlayer: action.nextPlayer,
 				board: action.board,
+        message: action.message,
         turnNumber: action.newTurn,
 			}
 
@@ -155,14 +165,46 @@ const initialState = {
 	currentPlayer: 1,
   turnNumber: 1,
 	board: initBoard(),
+  hoverRow: initHoverRow(),
 	gameOver: false,
-	message: '',
+	message: 'Connect Four!'
 };
 
 function App() {
 	const [state, dispatch] = useReducer(reducer, initialState);
+
+  const toggleDisc = (col) =>{
+
+    let row = [...state.hoverRow]
+
+    if (!state.gameOver){
+        if (!row[col]) {
+          row[col] = state.currentPlayer;
+        }else{
+          row[col] = 0;
+        }
+      dispatch({
+        type: 'hover',
+        hoverRow: row,
+      })
+    }
+
+    console.log(state.hoverRow)
+  }
+
+  const clearHoverRow = () =>{
+    if (!state.gameOver){
+      dispatch({
+        type: 'hover',
+        hoverRow: [0,0,0,0,0,0,0],
+      })
+    }
+    console.log(state.hoverRow)
+  }
+
 	const play = (col) => {
 		let board = cloneBoard(state.board)
+    clearHoverRow();
 
 		if (!state.gameOver) {
 			// check for first free position in clicked column
@@ -177,13 +219,13 @@ function App() {
 			if (result === state.player1) {
 				dispatch({
 					type: 'endGame',
-					message: 'Player 1 Wins!',
+					message: 'Orange Player Wins!',
 					board,
 				});
 			} else if (result === state.player2) {
 				dispatch({
 					type: 'endGame',
-					message: 'Player 2 Wins!',
+					message: 'Green Player Wins!',
 					board,
 				});
 			} else if (result === 'draw') {
@@ -199,11 +241,15 @@ function App() {
 						: state.player1
 
         const newTurn = state.turnNumber +1;
-				dispatch({ type: 'togglePlayer',
+
+				dispatch({ 
+          type: 'togglePlayer',
           nextPlayer,
           board,
-          newTurn
+          newTurn,
+          message: nextPlayer === 1 ? "Orange Player Turn" :"Green Player Turn",
           })
+        console.log(state.message)
 			}
 		}else{
 			dispatch({
@@ -213,37 +259,54 @@ function App() {
 		}
 	};
 
-  let debug = true;
+
+  let debug = false;
 	return (
 		<div className="App">
 
 			<div className={styles.mainContainer}>
     
       <div className={styles.headerDiv}>
-        <h1 className={styles.headerText}> Connect 4 </h1>
+          <HeaderText message={state.message} />
       </div>
 
-				<table className={styles.boardTable}>
-					<tbody className={styles.boardTableBody}>
-						{state.board.map((row, i) => (
-							<Row key={i} rowIndex={i} row={row} play={play} />
-						))}
-					</tbody>
-				</table>
+        
+        <table className={styles.hoverDiscTable}>
+          <tbody className={styles.hoverDiscTableBody}>
+            <tr className={styles.hoverDiscRow}>
+            {state.hoverRow.map((cell, i) => (
+              <HoverCell key={i} value={cell}/>
+            ))}
+            </tr>
+          </tbody>
+        </table>
+
+      <div className={styles.boardContainer}>
+          <table className={styles.boardTable}>
+            <tbody className={styles.boardTableBody}>
+              {state.board.map((row, i) => (
+                <Row key={i} rowIndex={i} row={row} play={play} toggleDisc={toggleDisc} clearHoverRow={clearHoverRow} />
+              ))}
+            </tbody>
+          </table>
+      </div>
+
+      <button className={styles.redButton}
+        onClick={() => {
+          dispatch({ type: 'newGame'})
+        }}
+      > Reset Game
+      </button>
+
         <HighScoresModal gameOver={state.gameOver}
                         turnNumber={state.turnNumber}
                         dispatch={dispatch}
                         message={state.message}/>
 			</div>
+
         {debug &&
           <>
-				<button
-					onClick={() => {
-						dispatch({ type: 'newGame'})
-					}}
-				> New Game
-        </button>
-        <button 
+        <button  className={styles.redButton}
           onClick={() => {
             dispatch({type:'endGame', board:state.board})
           }}>
@@ -255,4 +318,42 @@ function App() {
 	);
 }
 
+const HoverCell = ({value}) =>{
+
+	let color = 'blankCircle';
+	if (value === 1) { color = 'oneCircle' }
+	else if (value === 2) { color = 'twoCircle' }
+
+  return(
+		<td className={styles.cellContainer}
+    >
+			<div className={styles.hoverDiscCellBlock} >
+				<div className={styles[color]}> </div>
+			</div>
+		</td>
+  )
+}
+
+const HeaderText = ({message}) => {
+  let headerStyle = styles.headerText
+
+  switch (message) {
+    case "Orange Player Turn":
+      headerStyle = styles.orangeHeader
+      break;
+
+    case "Green Player Turn":
+      headerStyle = styles.greenHeader
+      break;
+
+    default:
+      break;
+  }
+
+  return(
+    <>
+    <h1 className={headerStyle}>{message}</h1>
+    </>
+  )
+}
 export default App;
