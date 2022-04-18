@@ -10,9 +10,7 @@ export const HighScoresModal = ({gameOver, turnNumber, dispatch, message }) => {
   const [scores, setScores] = useState([])
   const [inputValue, setInputValue] = useState("");
   const [scoreSubmitted, setScoreSubmitted] = useState(false);
-  const [sliderVis, setSlider] = useState(false)
 
-  const showSidebar = () => setSlider(!sliderVis)
   
   const handleSubmit = async () => { 
     if (inputValue ==="") return;
