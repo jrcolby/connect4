@@ -55,7 +55,8 @@ export const HighScoresModal = ({
           className={!gameOver ? styles.modalSlider : styles.modalSliderActive}
         >
           <div className={styles.scoreInfo}>
-            {message}
+            {message} {turnNumber} turns
+
             <HighScoreInput
               inputValue={inputValue}
               handleSubmit={handleSubmit}
