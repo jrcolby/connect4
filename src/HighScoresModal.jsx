@@ -5,7 +5,6 @@ import styles from './Styles.module.css'
 import axios from 'axios'
 const endpoint = 'https://krat.es/ed9c524c7b801cfb9f6a'
 
-// https://krat.es/ed9c524c7b801cfb9f6a final endpoint
 export const HighScoresModal = ({
   gameOver,
   turnNumber,
@@ -70,7 +69,7 @@ export const HighScoresModal = ({
               {scores.map((record) => (
                 <tr className={styles.scoreRow} key={record._id}>
                   <td className={styles.nameCell}>{record.name}</td>
-                  <td className={styles.scoreCell}>{record.score}</td>
+                  <td className={styles.scoreCell}>{record.score} turns</td>
                 </tr>
               ))}
             </tbody>
